@@ -11,9 +11,9 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-dir="/etc"
-cmd="tcstl runserver -h 0.0.0.0 -p 5000"
-user="root"
+dir="/etc" #doesn't matter, tsctl is already in the default path
+cmd="hardcoded into start phase during evaluation"
+user="" #anyone can run tsctl
 
 name=`basename $0`
 pid_file="/var/run/$name.pid"
@@ -36,9 +36,9 @@ case "$1" in
         echo "Starting $name"
         cd "$dir"
         if [ -z "$user" ]; then
-            sudo $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            sudo tsctl runserver -h 0.0.0.0 -p 5000 >> "$stdout_log" 2>> "$stderr_log" &
         else
-            sudo -u "$user" $cmd >> "$stdout_log" 2>> "$stderr_log" &
+            sudo -u "$user" tsctl runserver -h 0.0.0.0 -p 5000 >> "$stdout_log" 2>> "$stderr_log" &
         fi
         echo $! > "$pid_file"
         if ! is_running; then
